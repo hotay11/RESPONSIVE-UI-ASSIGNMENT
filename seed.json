@@ -1,0 +1,15 @@
+[
+  {"id":"rec_0001","description":"Lunch at cafeteria","amount":5000,"category":"Food","date":"2026-10-08","createdAt":"2026-10-08T08:00:00.000Z","updatedAt":"2026-10-08T08:00:00.000Z"},
+  {"id":"rec_0002","description":"Chemistry textbook","amount":25000,"category":"Books","date":"2026-10-07","createdAt":"2026-10-07T09:00:00.000Z","updatedAt":"2026-10-07T09:00:00.000Z"},
+  {"id":"rec_0003","description":"Bus pass","amount":4500,"category":"Transport","date":"2026-10-12","createdAt":"2026-10-12T07:00:00.000Z","updatedAt":"2026-10-12T07:00:00.000Z"},
+  {"id":"rec_0004","description":"Coffee with friends","amount":8500.5,"category":"Entertainment","date":"2026-10-11","createdAt":"2026-10-11T15:00:00.000Z","updatedAt":"2026-10-11T15:00:00.000Z"},
+  {"id":"rec_0005","description":"Registration fees","amount":15000,"category":"Fees","date":"2026-10-10","createdAt":"2026-10-10T10:00:00.000Z","updatedAt":"2026-10-10T10:00:00.000Z"},
+  {"id":"rec_0006","description":"Tea and snacks","amount":3200.25,"category":"Food","date":"2026-10-13","createdAt":"2026-10-13T12:00:00.000Z","updatedAt":"2026-10-13T12:00:00.000Z"},
+  {"id":"rec_0007","description":"Notebook","amount":1800,"category":"Books","date":"2026-10-11","createdAt":"2026-10-11T11:00:00.000Z","updatedAt":"2026-10-11T11:00:00.000Z"},
+  {"id":"rec_0008","description":"Leap day printing","amount":0.01,"category":"Fees","date":"2024-02-29","createdAt":"2024-02-29T08:00:00.000Z","updatedAt":"2024-02-29T08:00:00.000Z"},
+  {"id":"rec_0009","description":"Laptop for for coding","amount":999999.99,"category":"Other","date":"2025-12-31","createdAt":"2025-12-31T08:00:00.000Z","updatedAt":"2025-12-31T08:00:00.000Z"},
+  {"id":"rec_0010","description":"X","amount":0,"category":"Other","date":"2026-01-01","createdAt":"2026-01-01T00:00:00.000Z","updatedAt":"2026-01-01T00:00:00.000Z"},
+  {"id":"rec_0011","description":"Street food stall","amount":2500,"category":"Food-Court","date":"2026-10-09","createdAt":"2026-10-09T13:00:00.000Z","updatedAt":"2026-10-09T13:00:00.000Z"},
+  {"id":"rec_0012","description":"Tom & Jerry's <snacks>","amount":1200.5,"category":"Food","date":"2026-10-13","createdAt":"2026-10-13T14:00:00.000Z","updatedAt":"2026-10-13T14:00:00.000Z"},
+  {"id":"rec_0013","description":"Cinema night","amount":12000,"category":"Entertainment","date":"2026-10-10","createdAt":"2026-10-10T19:00:00.000Z","updatedAt":"2026-10-10T19:00:00.000Z"}
+]

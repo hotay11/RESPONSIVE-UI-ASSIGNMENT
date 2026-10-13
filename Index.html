@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PESA | Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">P</span>
+      <span>PESA</span>
+    </div>
+    <button class="btn" id="exportTop" aria-label="Export data as JSON" title="Export data">↓ Export</button>
+  </header>
+
+  <nav class="sidebar" aria-label="Main navigation">
+    <button class="active" data-view="dashboard" title="Dashboard" aria-label="Dashboard" aria-current="page">⌂</button>
+    <button data-view="transactions" title="Transactions" aria-label="Transactions">💰</button>
+    <button data-view="add" title="Add Expense" aria-label="Add Expense">➕</button>
+    <button data-view="settings" title="Settings" aria-label="Settings">⚙️</button>
+    <button data-view="about" title="About" aria-label="About">ℹ️</button>
+  </nav>
+
+  <main id="main" tabindex="-1">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="view active" aria-labelledby="dashboardTitle">
+      <div class="heading">
+        <div class="eyebrow">Student Finance</div>
+        <h1 id="dashboardTitle">Dashboard</h1>
+        <p class="subtitle">Your money, organized and under control.</p>
+      </div>
+
+      <div class="stats">
+        <article class="card stat">
+          <div class="stat-label">Total Spending</div>
+          <div class="stat-value" id="totalSpending">TSh 0</div>
+          <div class="small" id="totalConverted">All recorded expenses</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-label">Transactions</div>
+          <div class="stat-value" id="totalRecords">0</div>
+          <div class="small">Saved records</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-label">Top Category</div>
+          <div class="stat-value" id="topCategory">—</div>
+          <div class="small">Highest spending</div>
+        </article>
+        <article class="card stat">
+          <div class="stat-label">Cap Used</div>
+          <div class="stat-value" id="budgetPercent">0%</div>
+          <div class="small" id="budgetSmall">Set a cap in Settings</div>
+        </article>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="card panel wide" aria-labelledby="trendTitle">
+          <div class="panel-head">
+            <div>
+              <h2 id="trendTitle">Spending Overview</h2>
+              <p class="muted small">Last 7 days</p>
+            </div>
+          </div>
+          <div class="chart" id="trendChart" role="img" aria-label="Bar chart of spending over the last 7 days"></div>
+          <p class="sr-only" id="trendSummary"></p>
+        </section>
+
+        <section class="card panel" aria-labelledby="capTitle">
+          <div class="panel-head">
+            <h2 id="capTitle">Spending Cap</h2>
+            <button class="btn small-btn" data-view="settings">Edit</button>
+          </div>
+          <div class="stat-value" id="budgetDisplay">TSh 0 / TSh 0</div>
+          <div class="progress"><div class="progress-bar" id="budgetBar"></div></div>
+          <p class="muted small" id="capPolite" role="status"></p>
+          <p class="small cap-alert" id="capAlert" role="alert"></p>
+        </section>
+
+        <section class="card panel" aria-labelledby="catTitle">
+          <div class="panel-head">
+            <h2 id="catTitle">Top Categories</h2>
+            <button class="btn small-btn" data-view="transactions">See all</button>
+          </div>
+          <div id="categoriesList"></div>
+        </section>
+
+        <section class="card panel wide" aria-labelledby="recentTitle">
+          <div class="panel-head">
+            <div>
+              <h2 id="recentTitle">Recent Transactions</h2>
+              <p class="muted small">Your latest spending</p>
+            </div>
+            <button class="btn primary small-btn" data-view="add">＋ Add Expense</button>
+          </div>
+          <div id="recentTransactions"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- TRANSACTIONS -->
+    <section id="transactions" class="view" aria-labelledby="transactionsTitle">
+      <div class="heading">
+        <div class="eyebrow">Records</div>
+        <h1 id="transactionsTitle">Transactions</h1>
+        <p class="subtitle">Search with regex, sort, edit and manage your expenses</p>
+      </div>
+
+      <div class="toolbar">
+        <div>
+          <label for="search">Search (regex allowed)</label>
+          <input id="search" type="search" placeholder="e.g. (coffee|tea)" autocomplete="off">
+        </div>
+        <div>
+          <label for="sort">Sort by</label>
+          <select id="sort">
+            <option value="newest">Date: newest</option>
+            <option value="oldest">Date: oldest</option>
+            <option value="az">Description: A → Z</option>
+            <option value="za">Description: Z → A</option>
+            <option value="high">Amount: high → low</option>
+            <option value="low">Amount: low → high</option>
+          </select>
+        </div>
+        <label class="check"><input type="checkbox" id="caseToggle" checked> Ignore case</label>
+        <button class="btn primary" data-view="add">＋ Add Expense</button>
+      </div>
+      <p id="searchStatus" role="status" class="muted small"></p>
+
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Transactions table, scrollable">
+        <table>
+          <caption class="sr-only">List of expenses</caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyMessage" class="muted empty">No transactions found.</p>
+    </section>
+
+    <!-- ADD -->
+    <section id="add" class="view" aria-labelledby="formTitle">
+      <div class="heading">
+        <div class="eyebrow">Records</div>
+        <h1 id="formTitle">Add Expense</h1>
+        <p class="subtitle">Record a new student expense.</p>
+      </div>
+
+      <form id="expenseForm" class="card form-card" novalidate>
+        <div class="form-grid">
+          <div>
+            <label for="description">Description</label>
+            <input id="description" placeholder="e.g. Lunch at cafeteria" aria-describedby="descriptionError" autocomplete="off">
+            <div class="field-error" id="descriptionError"></div>
+          </div>
+
+          <div class="form-grid two">
+            <div>
+              <label for="amount">Amount</label>
+              <input id="amount" type="text" inputmode="decimal" placeholder="5000" aria-describedby="amountError" autocomplete="off">
+              <div class="field-error" id="amountError"></div>
+            </div>
+            <div>
+              <label for="category">Category</label>
+              <select id="category" aria-describedby="categoryError"></select>
+              <div class="field-error" id="categoryError"></div>
+            </div>
+          </div>
+
+          <div>
+            <label for="date">Date (YYYY-MM-DD)</label>
+            <input id="date" type="text" placeholder="2026-10-13" aria-describedby="dateError" autocomplete="off">
+            <div class="field-error" id="dateError"></div>
+          </div>
+
+          <div class="button-row">
+            <button type="button" class="btn" id="cancel">Cancel</button>
+            <button type="submit" class="btn primary" id="submitExpense">Add Expense</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="view" aria-labelledby="settingsTitle">
+      <div class="heading">
+        <div class="eyebrow">Preferences</div>
+        <h1 id="settingsTitle">Settings</h1>
+        <p class="subtitle">Control your cap, currencies and saved data.</p>
+      </div>
+
+      <div class="info-grid">
+        <section class="card info-card" aria-labelledby="capCurTitle">
+          <h2 id="capCurTitle">Cap &amp; Currency</h2>
+          <div class="setting-row">
+            <label for="budgetInput">Spending cap (in base currency)</label>
+            <input id="budgetInput" type="text" inputmode="decimal">
+          </div>
+          <div class="setting-row">
+            <label for="baseCurrency">Base currency code</label>
+            <input id="baseCurrency" maxlength="5">
+          </div>
+          <div class="setting-row">
+            <label for="cur1Code">Currency 2 code</label>
+            <input id="cur1Code" maxlength="5">
+            <label for="cur1Rate">1 base = ? of currency 2</label>
+            <input id="cur1Rate" inputmode="decimal">
+          </div>
+          <div class="setting-row">
+            <label for="cur2Code">Currency 3 code</label>
+            <input id="cur2Code" maxlength="5">
+            <label for="cur2Rate">1 base = ? of currency 3</label>
+            <input id="cur2Rate" inputmode="decimal">
+          </div>
+          <div class="field-error" id="settingsError" role="alert"></div>
+          <div class="button-row">
+            <button class="btn primary" id="saveSettings">Save Settings</button>
+          </div>
+        </section>
+
+        <section class="card info-card" aria-labelledby="catSetTitle">
+          <h2 id="catSetTitle">Categories</h2>
+          <p class="muted small">Add or remove expense categories.</p>
+          <div id="settingsCategories"></div>
+          <div class="setting-row">
+            <label for="newCategory">New category</label>
+            <input id="newCategory" aria-describedby="newCategoryError" autocomplete="off">
+            <div class="field-error" id="newCategoryError"></div>
+          </div>
+          <div class="button-row">
+            <button class="btn" id="addCategory">＋ Add Category</button>
+          </div>
+        </section>
+
+        <section class="card info-card" aria-labelledby="dataTitle">
+          <h2 id="dataTitle">Data</h2>
+          <p class="muted small">Save a copy of your records, load a saved copy, or restore starter data.</p>
+          <div class="button-row">
+            <button class="btn primary" id="exportBtn">Export JSON</button>
+            <button class="btn danger" id="resetBtn">Reset Data</button>
+          </div>
+          <div class="setting-row">
+            <label for="importFile">Import JSON file</label>
+            <input type="file" id="importFile" accept="application/json,.json">
+            <p id="importMessage" role="status" class="small"></p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="view" aria-labelledby="aboutTitle">
+      <div class="heading">
+        <div class="eyebrow">About</div>
+        <h1 id="aboutTitle">About PESA</h1>
+        <p class="subtitle">Student finance, simplified.</p>
+      </div>
+
+      <div class="info-grid">
+        <article class="card info-card">
+          <h2>What is PESA?</h2>
+          <p class="muted mt">PESA helps students record expenses, understand spending patterns and stay within a personal spending cap.</p>
+          <ul class="plain-list">
+            <li>Expense tracking with validated forms</li>
+            <li>Regex search and sorting</li>
+            <li>Cap monitoring with live messages</li>
+            <li>Local saving plus JSON import/export</li>
+          </ul>
+        </article>
+
+        <article class="card info-card">
+          <h2>Developer</h2>
+          <p class="muted mt">Student Finance Tracker project.</p>
+          <div class="setting-row">GitHub: <a href="https://github.com/yourusername">github.com/yourusername</a></div>
+          <div class="setting-row">Email: <a href="mailto:your@email.com">your@email.com</a></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>PESA Student Finance Tracker • Vanilla HTML, CSS &amp; JavaScript</footer>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button class="active" data-view="dashboard" aria-current="page">⌂<br>Home</button>
+    <button data-view="transactions">⇄<br>Records</button>
+    <button data-view="add">＋<br>Add</button>
+    <button data-view="settings">⚙<br>Settings</button>
+    <button data-view="about">ℹ<br>About</button>
+  </nav>
+
+  <div id="status" class="status" role="status"></div>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>

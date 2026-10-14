@@ -432,7 +432,7 @@ async function startApp() {
           renderCategoryList, renderSettings, renderAll, setInlineEdit } = UI;
 
   // First visit: load the starter records from seed.json
-  if (state.records === null) {
+  if (state.records === null || state.records.length === 0) {
     const seed = await State.loadSeed();
     state.records = seed;
     if (seed.length) State.persist();      // if the seed failed to load, try again next time
